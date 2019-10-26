@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VulcaLoc</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="str_btn_find">Find</string>
+    <string name="str_tv_address">Address</string>
+    <string name="google_direction_api">AIzaSyC7aO2ri5wsZEBhI3iqm70A1-m7vTYmehg</string>
+
+    <string-array name="place_type">
+        <item>airport</item>
+        <item>amusement_park</item>
+        <item>atm</item>
+        <item>bank</item>
+        <item>bus_station</item>
+        <item>church</item>
+        <item>doctor</item>
+        <item>hospital</item>
+        <item>mosque</item>
+        <item>movie_theater</item>
+        <item>hindu_temple</item>
+        <item>restaurant</item>
+        <item>school</item>
+    </string-array>
+
+    <string-array name="place_type_name">
+        <item>Airport</item>
+        <item>Amusement Park</item>
+        <item>ATM</item>
+        <item>Bank</item>
+        <item>Bus Station</item>
+        <item>Church</item>
+        <item>Doctor</item>
+        <item>Hospital</item>
+        <item>Mosque</item>
+        <item>Movie Theater</item>
+        <item>Hindu Temple</item>
+        <item>Restaurant</item>
+        <item>School</item>
+    </string-array>
+
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+
+</resources>
