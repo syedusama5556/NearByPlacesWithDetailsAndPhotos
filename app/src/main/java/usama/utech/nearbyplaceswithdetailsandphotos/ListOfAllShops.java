@@ -48,9 +48,18 @@ public class ListOfAllShops extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_all_shops);
 
+
         sb.append("location=" + latLngnewCenter.latitude + "," + latLngnewCenter.longitude);
         sb.append("&radius=25000");
-        sb.append("&name=" + type);
+
+
+        if (getIntent().getStringExtra("type") != null) {
+            sb.append("&name=" +type+" "+getIntent().getStringExtra("type"));
+        }else {
+
+            sb.append("&name=" + type);
+        }
+
         sb.append("&sensor=true");
         sb.append("&key=" + getResources().getString(R.string.google_direction_api));
 
@@ -172,7 +181,7 @@ public class ListOfAllShops extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ListOfAllShops.this, MainActivity.class));
+        startActivity(new Intent(ListOfAllShops.this, ShopsMuncipilityList.class));
         finish();
     }
 

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ShopsMuncipilityList"
+    android:weightSum="9">
+
+    <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:onClick="gowith_showalllist"
+        android:text="Show All the List" />
+
+    <Button
+        android:layout_weight="1"
+        style="@android:style/Widget.Holo.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="gowith_SanBenito"
+        android:text="San Benito" />
+    <Button
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Del Carmen"
+        android:onClick="gowith_del"
+        style="@android:style/Widget.Holo.Button"
+        />
+    <Button
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Burgos"
+        style="@android:style/Widget.Holo.Button"
+        android:onClick="gowith_burgos"
+        />
+    <Button
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dapa"
+        style="@android:style/Widget.Holo.Button"
+        android:onClick="gowith_Dapa"
+        />
+    <Button
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pilar"
+        style="@android:style/Widget.Holo.Button"
+        android:onClick="gowith_Pilar"
+        />
+    <Button
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="General Luna"
+        style="@android:style/Widget.Holo.Button"
+        android:onClick="gowith_Luna"
+        />
+    <Button
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Santa Monica"
+        style="@android:style/Widget.Holo.Button"
+        android:onClick="gowith_Santa"
+        />
+    <Button
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="San Isidro"
+        style="@android:style/Widget.Holo.Button"
+        android:onClick="gowith_SanIsidro"
+        />
+
+
+
+</LinearLayout>

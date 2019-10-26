@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        Toast.makeText(MainActivity.this, "My Account", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_gallery:
-                        startActivity(new Intent(getApplicationContext(), ListOfAllShops.class));
+                        startActivity(new Intent(getApplicationContext(), ShopsMuncipilityList.class));
                         finish();
                         break;
                     case R.id.nav_share:
