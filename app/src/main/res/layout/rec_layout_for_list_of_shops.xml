@@ -39,6 +39,11 @@
                 android:layout_height="wrap_content"
                 android:text="rec_vicinity"/>
             <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Service : Vulcanizing"/>
+            <TextView
                 android:id="@+id/rec_formatted_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

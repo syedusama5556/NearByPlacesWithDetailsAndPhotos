@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 
 import usama.utech.nearbyplaceswithdetailsandphotos.model.Photo;
 import usama.utech.nearbyplaceswithdetailsandphotos.model.Place;
@@ -161,8 +162,9 @@ public class PlaceDialogFragment extends DialogFragment {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            // Creating an instance of ImageView to display the downloaded image               
-            ImageView iView = new ImageView(getActivity().getBaseContext());
+            // Creating an instance of ImageView to display the downloaded image
+
+            ImageView iView = new ImageView(Objects.requireNonNull(getActivity()).getBaseContext());
 
             // Setting the downloaded image in ImageView
             iView.setImageBitmap(result);

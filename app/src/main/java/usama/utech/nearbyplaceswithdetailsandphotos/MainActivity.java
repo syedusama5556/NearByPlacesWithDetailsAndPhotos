@@ -1,9 +1,21 @@
 package usama.utech.nearbyplaceswithdetailsandphotos;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -12,14 +24,19 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,7 +53,9 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -44,10 +63,12 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 
@@ -103,7 +124,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private static final LatLngBounds Siargao_Island_BOUNDS = new LatLngBounds(new LatLng(9.755424, 126.054844),
             new LatLng(10.051587, 126.049695));
+    private LocationManager locationManager;
+    public static final int REQUEST_LOCATION_CODE = 99;
+    public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 22;
 
+    SearchView search_bar_for_service_search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +143,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        search_bar_for_service_search  = findViewById(R.id.search_bar_for_service_search);
+
+        if (!isGooglePlayServicesAvailable(this)) {
+            Toast.makeText(this, "Play services not updated, please update them in order to use this app", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
+            checkLocationPermission() ;
+           checkLocation();//check whether location service is enable or not in your  phone
+
+
+
+        }
+
 
         mService = Common.getGoogleAPI();
 
@@ -169,6 +213,37 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 return true;
 
+            }
+        });
+
+
+        search_bar_for_service_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String newText) {
+
+                newText = newText.toLowerCase();
+
+                if (!newText.equals("")) {
+
+
+                    search_for_service(newText);
+
+
+
+
+                } else {
+                    Toast.makeText(MainActivity.this, "Enter Text First", Toast.LENGTH_SHORT).show();
+                }
+
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+
+                return false;
             }
         });
 
@@ -249,6 +324,87 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+
+
+
+
+
+
+    public boolean isGooglePlayServicesAvailable(Activity activity) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
+        if (status != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(activity, status, 2404).show();
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public boolean checkLocationPermission() {
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_LOCATION_CODE);
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_LOCATION_CODE);
+                }
+                return false;
+
+            } else
+                return true;
+
+    }
+
+
+
+
+    private boolean checkLocation() {
+        if (!isLocationEnabled())
+            showAlert();
+        return isLocationEnabled();
+    }
+
+    private void showAlert() {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Enable Location")
+                .setMessage("Your Locations Settings is set to 'Off'.\nPlease Enable Location to " +
+                        "use this app")
+                .setPositiveButton("Location Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+
+                        Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(myIntent);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+
+                    }
+                });
+        dialog.show();
+    }
+
+    private boolean isLocationEnabled() {
+
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+
+
+
+
+
+
+
     void startTask() {
 
 
@@ -278,6 +434,129 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Invokes the "doInBackground()" method of the class PlaceTask
         placesTask.execute(sb.toString());
+    }
+
+
+
+    void search_for_service(String type){
+
+
+            if (mGoogleMap != null)
+                mGoogleMap.clear();
+
+
+            if (mLocation == null) {
+                Toast.makeText(getBaseContext(), "Please mark a location", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            drawMarker(mLocation, BitmapDescriptorFactory.HUE_BLUE);
+
+
+        LatLng latLngnew = new LatLng(9.848396, 126.045457);
+
+            StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+            sb.append("location=" + mLocation.latitude + "," + mLocation.longitude);
+            sb.append("&radius=30000");
+            sb.append("&name=" + type);
+            sb.append("&sensor=true");
+            sb.append("&key=" + getResources().getString(R.string.google_direction_api));
+
+
+
+
+
+
+        try {
+            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+
+
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, sb.toString(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            JSONObject person = null;
+                            JSONArray jPlaces = null;
+                            try {
+
+                                Place[] places = null;
+                                PlaceJSONParser placeJsonParser = new PlaceJSONParser();
+
+
+                                person = new JSONObject(response);
+                                    /** Getting the parsed data as a List construct */
+
+                                    System.out.println("json obj: " + person);
+                                    places = placeJsonParser.parse(person);
+
+
+
+                                mPlaces = places;
+                                Common.placeArrayList_static = Arrays.asList(places);
+                                if (Common.placeArrayList_static.size() != 0) {
+                                    System.out.println("array is " + Common.placeArrayList_static.get(0).mPlaceName);
+
+                                }
+                                for (int i = 0; i < places.length; i++) {
+
+                                    Place place = places[i];
+
+
+                                    get_place_data(place.mPlaceId);
+
+                                    //    Toast.makeText(MainActivity.this, "name: " + place.mPlaceName + " place id " + place.mPlaceId, Toast.LENGTH_SHORT).show();
+
+                                    // Getting latitude of the place
+                                    double lat = Double.parseDouble(place.mLat);
+
+                                    // Getting longitude of the place
+                                    double lng = Double.parseDouble(place.mLng);
+
+                                    LatLng latLng = new LatLng(lat, lng);
+
+                                    Marker m = drawMarker(latLng, UNDEFINED_COLOR);
+
+                                    // Adding place reference to HashMap with marker id as HashMap key
+                                    // to get its reference in infowindow click event listener
+                                    mHMReference.put(m.getId(), place);
+
+                                }
+                                System.out.println("myresponce " + person);
+
+                                System.out.println("Place is " );
+
+                            } catch (JSONException e) {
+                                System.out.println("Place is error " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    System.out.println("distance is error" + error);
+                }
+            });
+            queue.add(stringRequest);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -612,48 +891,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             queue.add(stringRequest);
 
 
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-
-
-                    try {
-
-
-                        for (int i = 0; i < response.length(); i++) {
-
-                            JSONObject person = (JSONObject) response
-                                    .get(i);
-
-                            String name = person.getString("formatted_address");
-                            String email = person.getString("name");
-
-                            String home = person.getString("vicinity");
-                            String mobile = person.getString("formatted_phone_number");
-
-
-                            System.out.println("data " + i + " is " + name);
-                        }
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),
-                                "Error: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
-                    }
-
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
-
-            //   queue.add(jsonArrayRequest);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -860,6 +1097,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return places;
         }
 
+
+
+
         // Executed after the complete execution of doInBackground() method
         @Override
         protected void onPostExecute(Place[] places) {
@@ -877,7 +1117,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 get_place_data(place.mPlaceId);
 
-                Toast.makeText(MainActivity.this, "name: " + place.mPlaceName + " place id " + place.mPlaceId, Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(MainActivity.this, "name: " + place.mPlaceName + " place id " + place.mPlaceId, Toast.LENGTH_SHORT).show();
 
                 // Getting latitude of the place
                 double lat = Double.parseDouble(place.mLat);
