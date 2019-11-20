@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:context=".ShowDataFullScreen">
+
+
+    <ImageView
+        android:id="@+id/rec_img"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/rec_name"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rec_name" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/rec_vicinity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="owner" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service : Vulcanizing" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/rec_formatted_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rec_formatted_address" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/rec_formatted_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rec_formatted_phone_number" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/rec_opening_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rec_opening_hours" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/rec_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rec_rating" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/rec_price_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Method" />
+
+
+</LinearLayout>

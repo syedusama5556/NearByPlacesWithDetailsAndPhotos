@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:elevation="5dp"
+    android:id="@+id/rec_cardview"
     app:cardCornerRadius="8dp">
 
     <RelativeLayout
@@ -70,7 +71,7 @@
                 android:id="@+id/rec_price_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="price_level"/>
+                android:text="Payment Method"/>
 
 
         </LinearLayout>

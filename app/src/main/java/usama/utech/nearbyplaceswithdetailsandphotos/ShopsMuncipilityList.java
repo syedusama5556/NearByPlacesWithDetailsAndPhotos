@@ -60,6 +60,8 @@ public class ShopsMuncipilityList extends AppCompatActivity {
     public void gowith_showalllist(View view) {
 
         Intent intent = new Intent(getApplicationContext(), ListOfAllShops.class);
+
+        intent.putExtra("type","all");
         startActivity(intent);
         finish();
 

@@ -5,6 +5,21 @@ public class PlaceDetails {
 
     String price_level,vicinity,formatted_address,opening_hours,name,rating,formatted_phone_number;
 
+    int imguri;
+
+
+
+    public PlaceDetails(String price_level, String vicinity, String formatted_address, String opening_hours, String name, String rating, String formatted_phone_number, int imguri) {
+        this.price_level = price_level;
+        this.vicinity = vicinity;
+        this.formatted_address = formatted_address;
+        this.opening_hours = opening_hours;
+        this.name = name;
+        this.rating = rating;
+        this.formatted_phone_number = formatted_phone_number;
+        this.imguri = imguri;
+    }
+
     public PlaceDetails(String price_level, String vicinity, String formatted_address, String opening_hours, String name, String rating, String formatted_phone_number) {
         this.price_level = price_level;
         this.vicinity = vicinity;
@@ -14,7 +29,13 @@ public class PlaceDetails {
         this.rating = rating;
         this.formatted_phone_number = formatted_phone_number;
     }
+    public int getImguri() {
+        return imguri;
+    }
 
+    public void setImguri(int imguri) {
+        this.imguri = imguri;
+    }
     public String getPrice_level() {
         return price_level;
     }

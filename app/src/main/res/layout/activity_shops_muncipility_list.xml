@@ -62,6 +62,7 @@
         android:text="General Luna"
         style="@android:style/Widget.Holo.Button"
         android:onClick="gowith_Luna"
+
         />
     <Button
         android:layout_weight="1"
